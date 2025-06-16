@@ -1,6 +1,6 @@
 const express = require('express');
 const app = express();
-const port = 3000;
+const PORT = process.env.PORT || 3000;
 
 app.use(express.json());
 
@@ -17,6 +17,6 @@ app.post('/api/send', (req, res) => {
     res.json({ success: true });
 });
 
-app.listen(port, () => {
-    console.log(`שרת פועל על http://localhost:${port}`);
+app.listen(PORT, () => {
+    console.log(`שרת פועל על http://localhost:${PORT}`);
 });
