@@ -9,7 +9,7 @@ const mongoose = require('mongoose');
 const ordersRoutes = require('./routes/orders_routes');
 
 app.use(cors({
-    origin: 'http://localhost:3000', // או '*' כדי לאפשר לכל המקורות
+    origin: '*',
     methods: ['GET', 'POST', 'PUT', 'DELETE'],
 }));
 app.use(express.json());
