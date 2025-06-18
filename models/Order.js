@@ -9,19 +9,23 @@ const orderSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
+    customerMail: {
+        type: String,
+        required: true,
+    },
     orderId: {
         type: Number,
         unique: true,
         required: true,
     },
-    quantity: {
-        type: Number,
-        required: true,
-    },
     orderDate: {
         type: Date,
         required: true,
-    }
+    },
+    orderDescription: {
+        type: String,
+        required: true,
+    },
 });
 
 orderSchema.pre('validate', async function (next) {
