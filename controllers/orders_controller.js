@@ -11,13 +11,14 @@ exports.getAllOrders = async (req, res) => {
 
 exports.createOrder = async (req, res) => {
     try {
-        const { customerName, customerPhone, quantity, orderDate } = req.body;
+        const { customerName, customerPhone, customerMail, orderDate, orderDescription } = req.body;
 
         const newOrder = new Order({
             customerName,
             customerPhone,
-            quantity,
+            customerMail,
             orderDate,
+            orderDescription,
         });
 
         await newOrder.save();
