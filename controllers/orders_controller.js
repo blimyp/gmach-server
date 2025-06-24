@@ -2,7 +2,10 @@ const Order = require('../models/Order');
 
 exports.getAllOrders = async (req, res) => {
     try {
-        const orders = await Order.find().sort({ orderDate: -1 });
+        const orders = await Order.find()
+            .sort({ orderDate: -1 })
+            .populate('userId', 'name email'); // מציג רק את השדות הרצויים מהמשתמש
+
         res.json(orders);
     } catch (err) {
         res.status(500).json({ message: err.message });
@@ -11,7 +14,13 @@ exports.getAllOrders = async (req, res) => {
 
 exports.createOrder = async (req, res) => {
     try {
-        const { customerName, customerPhone, customerMail, orderDate, orderDescription } = req.body;
+        const {
+            customerName,
+            customerPhone,
+            customerMail,
+            orderDate,
+            orderDescription,
+        } = req.body;
 
         const newOrder = new Order({
             customerName,
@@ -19,6 +28,7 @@ exports.createOrder = async (req, res) => {
             customerMail,
             orderDate,
             orderDescription,
+            userId: req.user._id,
         });
 
         await newOrder.save();
@@ -30,7 +40,7 @@ exports.createOrder = async (req, res) => {
 
 exports.getOrderById = async (req, res) => {
     try {
-        const order = await Order.findOne({ orderId: req.params.id });
+        const order = await Order.findOne({ orderId: req.params.id }).populate('userId', 'name email');
 
         if (!order) {
             return res.status(404).json({ message: 'Order not found' });
