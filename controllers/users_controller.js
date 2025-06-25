@@ -13,6 +13,7 @@ exports.getAllUsers = async (req, res) => {
 
 exports.createUser = async (req, res) => {
     try {
+        console.log('start create user');
         const { name, email, password, phone } = req.body;
         const existingUser = await User.findOne({ email });
         if (existingUser) return res.status(400).json({ message: 'Email already in use' });
@@ -56,8 +57,8 @@ exports.deleteUser = async (req, res) => {
 
 exports.loginUser = async (req, res) => {
     try {
+        console.log('strat login user');
         const { email, password } = req.body;
-
         const user = await User.findOne({ email });
         if (!user) return res.status(404).json({ message: 'User not found' });
 
