@@ -13,19 +13,20 @@ exports.getAllUsers = async (req, res) => {
 
 exports.createUser = async (req, res) => {
     try {
-        const { name, email, password } = req.body;
+        const { name, email, password, phone } = req.body;
         const existingUser = await User.findOne({ email });
         if (existingUser) return res.status(400).json({ message: 'Email already in use' });
+
         const hashedPassword = await bcrypt.hash(password, 10);
-        const newUser = new User({
-            name,
-            email,
-            password: hashedPassword
-        });
+        const newUser = new User({ name, email, password: hashedPassword, phone });
         const savedUser = await newUser.save();
+
         const userToReturn = savedUser.toObject();
         delete userToReturn.password;
-        res.status(201).json(userToReturn);
+
+        const token = jwt.sign({ id: savedUser._id }, 'your_secret_key', { expiresIn: '7d' });
+
+        res.status(201).json({ token, user: userToReturn });
     } catch (err) {
         res.status(400).json({ message: err.message });
     }
