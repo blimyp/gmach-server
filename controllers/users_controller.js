@@ -25,7 +25,7 @@ exports.createUser = async (req, res) => {
         const userToReturn = savedUser.toObject();
         delete userToReturn.password;
 
-        const token = jwt.sign({ id: savedUser._id }, 'your_secret_key', { expiresIn: '7d' });
+        const token = jwt.sign({ id: savedUser._id }, process.env.JWT_SECRET, { expiresIn: '7d' });
 
         res.status(201).json({ token, user: userToReturn });
     } catch (err) {
@@ -65,7 +65,7 @@ exports.loginUser = async (req, res) => {
         const isMatch = await bcrypt.compare(password, user.password);
         if (!isMatch) return res.status(401).json({ message: 'Invalid password' });
 
-        const token = jwt.sign({ id: user._id }, 'your_secret_key', { expiresIn: '7d' });
+        const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: '7d' });
 
         const userToReturn = user.toObject();
         delete userToReturn.password;
