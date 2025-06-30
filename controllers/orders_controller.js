@@ -2,15 +2,17 @@ const Order = require('../models/Order');
 
 exports.getAllOrders = async (req, res) => {
     try {
-        const orders = await Order.find()
+        const userId = req.user._id; 
+        const orders = await Order.find({ userId })
             .sort({ orderDate: -1 })
-            .populate('userId', 'name email'); // מציג רק את השדות הרצויים מהמשתמש
+            .populate('userId', 'name email');
 
-        res.json(orders);
+        res.status(200).json(orders);
     } catch (err) {
         res.status(500).json({ message: err.message });
     }
 };
+
 
 exports.createOrder = async (req, res) => {
     try {
