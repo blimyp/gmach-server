@@ -2,7 +2,7 @@ const Order = require('../models/Order');
 
 exports.getAllOrders = async (req, res) => {
     try {
-        const userId = req.user._id; 
+        const userId = req.user._id;
         const orders = await Order.find({ userId })
             .sort({ orderDate: -1 })
             .populate('userId', 'name email');
@@ -67,3 +67,17 @@ exports.deleteOrder = async (req, res) => {
         res.status(500).json({ message: err.message });
     }
 };
+
+exports.getAllOrdersDates = async (req, res) => {
+    try {
+        const orders = await Order.find({}, { orderDate: 1, _id: 0 })
+            .sort({ orderDate: -1 });
+
+        const dates = orders.map(order => order.orderDate);
+
+        res.status(200).json(dates);
+    } catch (err) {
+        res.status(500).json({ message: err.message });
+    }
+};
+
