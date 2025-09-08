@@ -31,3 +31,34 @@ exports.deleteImage = async (req, res) => {
         res.status(500).json({ message: error.message });
     }
 };
+
+// פונקציה לעדכון לייק
+exports.toggleLike = async (req, res) => {
+    try {
+        const { imageId, userId, like } = req.body;
+
+        if (!imageId || !userId || like === undefined) {
+            return res.status(400).json({ message: 'Missing parameters' });
+        }
+
+        let update;
+        if (like) {
+            update = { $addToSet: { likedBy: userId } };
+        } else {
+            update = { $pull: { likedBy: userId } };
+        }
+
+        const updatedImage = await Image.findByIdAndUpdate(
+            imageId,
+            update,
+            { new: true }
+        );
+
+        if (!updatedImage) return res.status(404).json({ message: 'Image not found' });
+
+        res.json(updatedImage);
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+};
+
