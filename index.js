@@ -8,6 +8,7 @@ const mongoose = require('mongoose');
 
 const ordersRoutes = require('./routes/orders_routes');
 const usersRoutes = require('./routes/users_routes');
+const imagesRoutes = require('./routes/images_routes');
 
 app.use(cors({
     origin: '*',
@@ -16,6 +17,7 @@ app.use(cors({
 app.use(express.json());
 app.use('/api/orders', ordersRoutes);
 app.use('/api/users', usersRoutes);
+app.use('/api/images', imagesRoutes);
 
 console.log("Mongo URI:", process.env.MONGO_URI);
 
